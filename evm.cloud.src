@@ -1,0 +1,3077 @@
+{
+  "Events": {
+    "RB1": [],
+    "RB2": [],
+    "RB3": [],
+    "RD1": [],
+    "RD2": [],
+    "RF1": [
+      {
+        "Action": "Bypass",
+        "BaseEventType": 11,
+        "Condition": {
+          "BooleanOperator": "And",
+          "Conditions": [
+            {
+              "Field": "parentProcessPath",
+              "Operator": "MatchInList",
+              "Value": "EmailPaths"
+            },
+            {
+              "Field": "filePath",
+              "Operator": "!Match",
+              "Value": "%appdata%\\*"
+            },
+            {
+              "Field": "filePath",
+              "Operator": "!Match",
+              "Value": "%localappdata%\\*"
+            },
+            {
+              "Field": "filePath",
+              "Operator": "!Match",
+              "Value": "%userprofile%\\AppData\\*"
+            }
+          ]
+        },
+        "EventType": "365f775e-7d2c-4548-ac11-c308f8cd5024",
+        "RuleDescription": "Suspicious file upload.",
+        "RuleName": "Suspicious File upload",
+        "Severity": "Medium"
+      }
+    ],
+    "RF2": [],
+    "RF3": [],
+    "RF4": [
+      {
+        "Action": "Bypass",
+        "BaseEventType": 14,
+        "Condition": {
+          "BooleanOperator": "And",
+          "Conditions": [
+            {
+              "Field": "parentProcessPath",
+              "Operator": "MatchInList",
+              "Value": "EmailPaths"
+            },
+            {
+              "Field": "filePath",
+              "Operator": "!Match",
+              "Value": "%appdata%\\*"
+            },
+            {
+              "Field": "filePath",
+              "Operator": "!Match",
+              "Value": "%localappdata%\\*"
+            },
+            {
+              "Field": "filePath",
+              "Operator": "!Match",
+              "Value": "%userprofile%\\AppData\\*"
+            }
+          ]
+        },
+        "EventType": null,
+        "RuleDescription": "Detects files written by known email client processes (e.g., Outlook, Thunderbird) to directories outside user-specific application data paths such as %appdata%, %localappdata%, or %userprofile%\\AppData. This behavior is suspicious as malicious attachments may drop payloads to uncommon directories.",
+        "RuleName": "Suspicious File Write Outside AppData from Email-Launched Process",
+        "Severity": "Medium"
+      },
+      {
+        "Action": "Bypass",
+        "BaseEventType": 14,
+        "Condition": {
+          "BooleanOperator": "And",
+          "Conditions": [
+            {
+              "BooleanOperator": "Or",
+              "Conditions": [
+                {
+                  "Field": "parentProcessPath",
+                  "Operator": "MatchInList",
+                  "Value": "WriteFileBlackList"
+                },
+                {
+                  "Field": "parentVerdict",
+                  "Operator": "!Equal",
+                  "Value": 1
+                },
+                {
+                  "Field": "processPath",
+                  "Operator": "MatchInList",
+                  "Value": "WriteFileBlackList"
+                },
+                {
+                  "Field": "processVerdict",
+                  "Operator": "!Equal",
+                  "Value": 1
+                }
+              ]
+            },
+            {
+              "BooleanOperator": "Or",
+              "Conditions": [
+                {
+                  "Field": "filePath",
+                  "Operator": "Match",
+                  "Value": "%systemroot%\\System32\\Tasks*"
+                },
+                {
+                  "Field": "filePath",
+                  "Operator": "Match",
+                  "Value": "%systemroot%\\SysWOW64\\Tasks*"
+                },
+                {
+                  "Field": "filePath",
+                  "Operator": "Match",
+                  "Value": "%systemroot%\\Tasks*"
+                }
+              ]
+            }
+          ]
+        },
+        "EventType": "58f03fc6-b177-41ad-a4c2-b62fb078d748",
+        "RuleDescription": "Detects creation of files in 'Tasks' directories (commonly used by Windows Task Scheduler) by untrusted or anomalous parent processes. This could indicate persistence being established through malicious scheduled tasks.",
+        "RuleName": "Suspicious Scheduled Task File Creation",
+        "Severity": "High"
+      },
+      {
+        "Action": "Bypass",
+        "BaseEventType": 14,
+        "Condition": {
+          "BooleanOperator": "And",
+          "Conditions": [
+            {
+              "BooleanOperator": "Or",
+              "Conditions": [
+                {
+                  "Field": "parentProcessPath",
+                  "Operator": "MatchInList",
+                  "Value": "WriteFileBlackList"
+                },
+                {
+                  "Field": "parentVerdict",
+                  "Operator": "!Equal",
+                  "Value": 1
+                },
+                {
+                  "Field": "processPath",
+                  "Operator": "MatchInList",
+                  "Value": "WriteFileBlackList"
+                },
+                {
+                  "Field": "processVerdict",
+                  "Operator": "!Equal",
+                  "Value": 1
+                }
+              ]
+            },
+            {
+              "Field": "filePath",
+              "Operator": "Match",
+              "Value": "%systemroot%\\system32\\drivers\\etc\\hosts"
+            }
+          ]
+        },
+        "EventType": "67b914fe-8dd0-41e9-840c-ec66f1f89bd3",
+        "RuleDescription": "Detects write operations to the Windows 'hosts' file, which can be used by attackers to redirect traffic, block security updates, or spoof domains. This rule filters for untrusted parent processes.",
+        "RuleName": "Suspicious Modification of Hosts File",
+        "Severity": "High"
+      },
+      {
+        "Action": "Bypass",
+        "BaseEventType": 14,
+        "Condition": {
+          "BooleanOperator": "And",
+          "Conditions": [
+            {
+              "BooleanOperator": "Or",
+              "Conditions": [
+                {
+                  "Field": "parentProcessPath",
+                  "Operator": "MatchInList",
+                  "Value": "WriteFileBlackList"
+                },
+                {
+                  "Field": "parentVerdict",
+                  "Operator": "!Equal",
+                  "Value": 1
+                },
+                {
+                  "Field": "processPath",
+                  "Operator": "MatchInList",
+                  "Value": "WriteFileBlackList"
+                },
+                {
+                  "Field": "processVerdict",
+                  "Operator": "!Equal",
+                  "Value": 1
+                }
+              ]
+            },
+            {
+              "BooleanOperator": "Or",
+              "Conditions": [
+                {
+                  "Field": "filePath",
+                  "Operator": "Match",
+                  "Value": "%appdata%\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\*"
+                },
+                {
+                  "Field": "filePath",
+                  "Operator": "Match",
+                  "Value": "%programdata%\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\*"
+                },
+                {
+                  "Field": "filePath",
+                  "Operator": "Match",
+                  "Value": "%systemroot%\\system\\iosubsys\\*"
+                },
+                {
+                  "Field": "filePath",
+                  "Operator": "Match",
+                  "Value": "%systemroot%\\system\\vmm32\\*"
+                },
+                {
+                  "Field": "filePath",
+                  "Operator": "Match",
+                  "Value": "%systemroot%\\Tasks\\*"
+                },
+                {
+                  "Field": "filePath",
+                  "Operator": "Equal",
+                  "Value": "%systemdrive%\\autoexec.bat"
+                },
+                {
+                  "Field": "filePath",
+                  "Operator": "Equal",
+                  "Value": "%systemdrive%\\config.sys"
+                },
+                {
+                  "Field": "filePath",
+                  "Operator": "Equal",
+                  "Value": "%systemroot%\\wininit.ini"
+                },
+                {
+                  "Field": "filePath",
+                  "Operator": "Equal",
+                  "Value": "%systemroot%\\winstart.bat"
+                },
+                {
+                  "Field": "filePath",
+                  "Operator": "Equal",
+                  "Value": "%systemroot%\\win.ini"
+                },
+                {
+                  "Field": "filePath",
+                  "Operator": "Equal",
+                  "Value": "%systemroot%\\system.ini"
+                },
+                {
+                  "Field": "filePath",
+                  "Operator": "Equal",
+                  "Value": "%systemroot%\\dosstart.bat"
+                }
+              ]
+            }
+          ]
+        },
+        "EventType": "814a4151-d834-4fea-b08e-7941b8f2c98f",
+        "RuleDescription": "Detects file writes to well-known startup folders and legacy system boot files (e.g., autoexec.bat, win.ini), which are often targeted by malware to establish persistence. Triggered only if the parent process is not trusted.",
+        "RuleName": "Persistence via Startup Folders and Legacy Boot Files",
+        "Severity": "High"
+      },
+      {
+        "Action": "Bypass",
+        "BaseEventType": 14,
+        "Condition": {
+          "BooleanOperator": "And",
+          "Conditions": [
+            {
+              "BooleanOperator": "Or",
+              "Conditions": [
+                {
+                  "Field": "parentVerdict",
+                  "Operator": "!Equal",
+                  "Value": 1
+                },
+                {
+                  "Field": "processVerdict",
+                  "Operator": "!Equal",
+                  "Value": 1
+                },
+                {
+                  "Field": "parentProcessPath",
+                  "Operator": "MatchInList",
+                  "Value": "Shells"
+                },
+                {
+                  "Field": "processPath",
+                  "Operator": "MatchInList",
+                  "Value": "Shells"
+                }
+              ]
+            },
+            {
+              "Field": "filePath",
+              "Operator": "MatchInList",
+              "Value": "InfectibleFiles"
+            }
+          ]
+        },
+        "EventType": "ce809159-b8c3-43bc-9e1a-8a70410de6b0",
+        "RuleDescription": "Detects file writes to potentially malicious extensions (e.g., .js, .docm, .jar) by suspicious or scripting engine parents like PowerShell or CMD. Helps identify initial stages of malware delivery or living-off-the-land attacks.",
+        "RuleName": "Suspicious File Write to Risky Extensions by Script-Based Parent",
+        "Severity": "High"
+      },
+      {
+        "Action": "Bypass",
+        "BaseEventType": 14,
+        "Condition": {
+          "BooleanOperator": "And",
+          "Conditions": [
+            {
+              "BooleanOperator": "Or",
+              "Conditions": [
+                {
+                  "Field": "parentVerdict",
+                  "Operator": "!Equal",
+                  "Value": 1
+                },
+                {
+                  "Field": "processVerdict",
+                  "Operator": "!Equal",
+                  "Value": 1
+                },
+                {
+                  "Field": "parentProcessPath",
+                  "Operator": "MatchInList",
+                  "Value": "Shells"
+                },
+                {
+                  "Field": "processPath",
+                  "Operator": "MatchInList",
+                  "Value": "Shells"
+                }
+              ]
+            },
+            {
+              "Field": "fileType",
+              "Operator": "Equal",
+              "Value": "EXECUTABLE"
+            }
+          ]
+        },
+        "EventType": "97cbf3f3-d180-4a09-a1eb-161920f51054",
+        "RuleDescription": "Detects writes of portable executable files by suspicious or script-based parent processes like PowerShell, CMD, etc., indicating potential malware dropper activity.",
+        "RuleName": "Suspicious PE File Write by Scripting Parents",
+        "Severity": "High"
+      },
+      {
+        "Action": "Bypass",
+        "BaseEventType": 14,
+        "Condition": {
+          "BooleanOperator": "And",
+          "Conditions": [
+            {
+              "BooleanOperator": "Or",
+              "Conditions": [
+                {
+                  "Field": "parentProcessPath",
+                  "Operator": "MatchInList",
+                  "Value": "WriteFileBlackList"
+                },
+                {
+                  "Field": "processPath",
+                  "Operator": "MatchInList",
+                  "Value": "WriteFileBlackList"
+                },
+                {
+                  "Field": "parentVerdict",
+                  "Operator": "!Equal",
+                  "Value": 1
+                },
+                {
+                  "Field": "processVerdict",
+                  "Operator": "!Equal",
+                  "Value": 1
+                }
+              ]
+            },
+            {
+              "BooleanOperator": "Or",
+              "Conditions": [
+                {
+                  "Field": "filePath",
+                  "Operator": "Match",
+                  "Value": "%systemroot%\\system32\\grouppolicy\\*"
+                },
+                {
+                  "Field": "filePath",
+                  "Operator": "Match",
+                  "Value": "%systemroot%\\Sysvol\\sysvol\\*\\Policies\\*"
+                }
+              ]
+            }
+          ]
+        },
+        "EventType": "1754982498098-fbooefe8j",
+        "RuleDescription": "Detects modification of sensitive Group Policy paths that could indicate tampering with system policies.",
+        "RuleName": "Unauthorized Group Policy File Modification",
+        "Severity": "High"
+      },
+      {
+        "Action": "Bypass",
+        "BaseEventType": 14,
+        "Condition": {
+          "BooleanOperator": "And",
+          "Conditions": [
+            {
+              "BooleanOperator": "Or",
+              "Conditions": [
+                {
+                  "Field": "parentProcessPath",
+                  "Operator": "MatchInList",
+                  "Value": "WriteFileBlackList"
+                },
+                {
+                  "Field": "parentVerdict",
+                  "Operator": "!Equal",
+                  "Value": 1
+                },
+                {
+                  "Field": "processPath",
+                  "Operator": "MatchInList",
+                  "Value": "WriteFileBlackList"
+                },
+                {
+                  "Field": "processVerdict",
+                  "Operator": "!Equal",
+                  "Value": 1
+                }
+              ]
+            },
+            {
+              "BooleanOperator": "Or",
+              "Conditions": [
+                {
+                  "Field": "filePath",
+                  "Operator": "MatchInList",
+                  "Value": "InfectibleFiles"
+                },
+                {
+                  "Field": "fileType",
+                  "Operator": "Equal",
+                  "Value": "EXECUTABLE"
+                }
+              ]
+            }
+          ]
+        },
+        "EventType": "1754983755884-0or4vzr57",
+        "RuleDescription": "Detects potentially malicious file write activities based  trust level, verdicts, and executable file types.",
+        "RuleName": "Suspicious File Write Detection",
+        "Severity": "Medium"
+      }
+    ],
+    "RF5": [
+      {
+        "Action": "Bypass",
+        "BaseEventType": 16,
+        "EventType": "03e186a8-6951-4c39-a696-15bcd7e8bce0",
+        "RuleDescription": "Detects files copied from a network shared folder to the local system, which may indicate data staging, unauthorized access, or lateral movement tag(T1039,TA0010)",
+        "RuleName": "File Copy from Network Share folder",
+        "Severity": "Medium"
+      }
+    ],
+    "RF6": [
+      {
+        "Action": "Bypass",
+        "BaseEventType": 17,
+        "EventType": "03e186a8-6951-4c39-a696-15bcd5214ce0",
+        "RuleDescription": "Detects files copied from a USB removable drive to the local system, which may indicate data transfer, shadow IT activity, or potential data exfiltration tag(T1091,TA0008)",
+        "RuleName": "File Copy from Removable Media (USB)",
+        "Severity": "Medium"
+      }
+    ],
+    "RF7": [
+      {
+        "Action": "Bypass",
+        "BaseEventType": 18,
+        "EventType": "03e186a8-6951-4c39-a696-15b6y7e8bce0",
+        "RuleDescription": "Detects files copied from the local system to a network shared folder, which may indicate data exfiltration or unauthorized distribution of files tag(T1570,TA0010)",
+        "RuleName": "File Copy to Network Share",
+        "Severity": "Medium"
+      }
+    ],
+    "RF8": [
+      {
+        "Action": "Bypass",
+        "BaseEventType": 19,
+        "EventType": "03e186a8-6951-4c39-a696-15bcd7e8bce0",
+        "RuleDescription": "Detects files copied from the local system to a USB removable drive, which may indicate data exfiltration or unauthorized transfer of sensitive information tag(T1091,TA0010)",
+        "RuleName": "File Copy to Removable Media (USB)",
+        "Severity": "Medium"
+      }
+    ],
+    "RI1": [],
+    "RI2": [],
+    "RI3": [],
+    "RI4": [],
+    "RI5": [],
+    "RN1": [],
+    "RN2": [],
+    "RP1": [
+      {
+        "Action": "Bypass",
+        "BaseEventType": 1,
+        "Condition": {
+          "BooleanOperator": "Or",
+          "Conditions": [
+            {
+              "Field": "parentProcessPath",
+              "Operator": "MatchInList",
+              "Value": "BlockList"
+            },
+            {
+              "Field": "processPath",
+              "Operator": "MatchInList",
+              "Value": "BlockList"
+            }
+          ]
+        },
+        "EventType": "6d958c4cbee349ceb7c59ff856fabxyzadv",
+        "RuleDescription": "OneAgent detected the launch of an application that has been blocklisted by the user. tags(T1218, TA0002)",
+        "RuleName": "Blocked application execution detected",
+        "Severity": "Critical"
+      },
+      {
+        "Action": "Bypass",
+        "BaseEventType": 1,
+        "Condition": {
+          "Field": "processPath",
+          "Operator": "MatchInList",
+          "Value": "suspiciousTools"
+        },
+        "EventType": "a3f37ad9afadfde89bd716a767c6009a",
+        "RuleDescription": "Detects the execution of PsExec or other Sysinternals utilities commonly leveraged by threat actors for remote execution, credential access, discovery, and defense evasion. These tools are legitimate administrative utilities but are frequently abused during post-exploitation to move laterally, collect system information, or bypass security controls. tags(T1218, TA0002)",
+        "RuleName": "Execution of PsExec or well-known malicious tools",
+        "Severity": "Critical"
+      },
+      {
+        "Action": "Bypass",
+        "BaseEventType": 1,
+        "Condition": {
+          "BooleanOperator": "Or",
+          "Conditions": [
+            {
+              "Field": "processCmdLine",
+              "Operator": "Match",
+              "Value": "*powershell*-Win*"
+            },
+            {
+              "Field": "processCmdLine",
+              "Operator": "Match",
+              "Value": "*powershell*-w*"
+            },
+            {
+              "Field": "processCmdLine",
+              "Operator": "Match",
+              "Value": "*powershell*-ep*"
+            },
+            {
+              "Field": "processCmdLine",
+              "Operator": "Match",
+              "Value": "*powershell*-command*"
+            },
+            {
+              "Field": "processCmdLine",
+              "Operator": "Match",
+              "Value": "*powershell*-NoL*"
+            },
+            {
+              "Field": "processCmdLine",
+              "Operator": "Match",
+              "Value": "*powershell*-InputFormat*"
+            },
+            {
+              "Field": "processCmdLine",
+              "Operator": "Match",
+              "Value": "*powershell*-Enc*"
+            },
+            {
+              "Field": "processCmdLine",
+              "Operator": "Match",
+              "Value": "*powershell*-NonInteractive*"
+            },
+            {
+              "Field": "processCmdLine",
+              "Operator": "Match",
+              "Value": "*powershell*-nonI*"
+            },
+            {
+              "Field": "processCmdLine",
+              "Operator": "Match",
+              "Value": "*powershell*-file*"
+            },
+            {
+              "Field": "processCmdLine",
+              "Operator": "Match",
+              "Value": "*powershell*Get-LocalGroupMember*-Group*Administrators*"
+            },
+            {
+              "Field": "processCmdLine",
+              "Operator": "Match",
+              "Value": "*powershell*Import-Module*ActiveDirectory*"
+            },
+            {
+              "Field": "processCmdLine",
+              "Operator": "Match",
+              "Value": "*powershell*Import-Module*-Name*AzureAD*"
+            },
+            {
+              "Field": "processCmdLine",
+              "Operator": "Match",
+              "Value": "*powershell*Import-Module*-Name*Az.Resources*"
+            },
+            {
+              "Field": "processCmdLine",
+              "Operator": "Match",
+              "Value": "*powershell*Import-Module*-Name*AzureAD*"
+            },
+            {
+              "Field": "processCmdLine",
+              "Operator": "Match",
+              "Value": "*powershell*Import-Module*ExchangeOnlineManagement*"
+            },
+            {
+              "Field": "processCmdLine",
+              "Operator": "Match",
+              "Value": "*powershell*Invoke-BloodHound*"
+            },
+            {
+              "Field": "processCmdLine",
+              "Operator": "Match",
+              "Value": "*powershell*Invoke-Mimikatz*-DumpCreds*"
+            },
+            {
+              "Field": "processCmdLine",
+              "Operator": "Match",
+              "Value": "*powershell*Add-Persistence*"
+            },
+            {
+              "Field": "processCmdLine",
+              "Operator": "Match",
+              "Value": "*powershell*Get-VaultCredential*"
+            },
+            {
+              "Field": "processCmdLine",
+              "Operator": "Match",
+              "Value": "*powershell*Invoke-CredentialInjection*"
+            },
+            {
+              "Field": "processCmdLine",
+              "Operator": "Match",
+              "Value": "*powershell*Invoke-Mimikatz*"
+            },
+            {
+              "Field": "processCmdLine",
+              "Operator": "Match",
+              "Value": "*powershell*New-ElevatedPersistenceOption*"
+            },
+            {
+              "Field": "processCmdLine",
+              "Operator": "Match",
+              "Value": "*powershell*New-UserPersistenceOption*"
+            },
+            {
+              "Field": "processCmdLine",
+              "Operator": "Match",
+              "Value": "*powershell*Out-Minidump*"
+            },
+            {
+              "Field": "processCmdLine",
+              "Operator": "Match",
+              "Value": "*powershell*SOAPHound.exe*"
+            },
+            {
+              "Field": "processCmdLine",
+              "Operator": "Match",
+              "Value": "*powershell*Import-Module*-Name*AzureAD*"
+            },
+            {
+              "Field": "processCmdLine",
+              "Operator": "Match",
+              "Value": "*powershell*Import-Module*ExchangeOnlineManagement*"
+            },
+            {
+              "Field": "processCmdLine",
+              "Operator": "Match",
+              "Value": "*powershell*Import-Module*MSOnline*"
+            },
+            {
+              "Field": "processCmdLine",
+              "Operator": "Match",
+              "Value": "*powershell*$SamAccountName*"
+            },
+            {
+              "Field": "processCmdLine",
+              "Operator": "Match",
+              "Value": "*powershell*$userprincipalname*"
+            },
+            {
+              "Field": "processCmdLine",
+              "Operator": "Match",
+              "Value": "*powershell*Get-Variable.exe*"
+            },
+            {
+              "Field": "processCmdLine",
+              "Operator": "Match",
+              "Value": "*powershell*safedump*-consoleoutput*-noninteractive*"
+            },
+            {
+              "Field": "processCmdLine",
+              "Operator": "Match",
+              "Value": "*powershell*New-AzAutomationRunbook*"
+            },
+            {
+              "Field": "processCmdLine",
+              "Operator": "Match",
+              "Value": "*powershell*Get-System*-Technique*NamedPipe*"
+            },
+            {
+              "Field": "processCmdLine",
+              "Operator": "Match",
+              "Value": "*powershell*Get-System*-Technique*Token*"
+            },
+            {
+              "Field": "processCmdLine",
+              "Operator": "Match",
+              "Value": "*powershell*NSudoLG.exe*"
+            },
+            {
+              "Field": "processCmdLine",
+              "Operator": "Match",
+              "Value": "*powershell*BadPotato.exe*"
+            },
+            {
+              "Field": "processCmdLine",
+              "Operator": "Match",
+              "Value": "*powershell*JuicyPotato.exe*"
+            },
+            {
+              "Field": "processCmdLine",
+              "Operator": "Match",
+              "Value": "*powershell*Set-ExecutionPolicy*-Scope*Process*Bypass*-Force*"
+            },
+            {
+              "Field": "processCmdLine",
+              "Operator": "Match",
+              "Value": "*powershell*Get-WinLogonTokenSystem*"
+            },
+            {
+              "Field": "processCmdLine",
+              "Operator": "Match",
+              "Value": "*powershell*$ppid=Get-Process*"
+            },
+            {
+              "Field": "processCmdLine",
+              "Operator": "Match",
+              "Value": "*powershell*Start-ATHProcessUnderSpecificParent;*-ParentId*"
+            },
+            {
+              "Field": "processCmdLine",
+              "Operator": "Match",
+              "Value": "*powershell*Get-CimInstance;*Win32_Process*"
+            },
+            {
+              "Field": "processCmdLine",
+              "Operator": "Match",
+              "Value": "*powershell*Start-Process;*Start-ATHProcessUnderSpecificParent*"
+            }
+          ]
+        },
+        "EventType": "f3cbde03-03fc-40c3-9afa-569d3a7b3f5d",
+        "RuleDescription": "Detects PowerShell execution with potentially malicious command line parameters tags(T1059.001, TA0002)",
+        "RuleName": "Suspicious PowerShell Command Line Parameters",
+        "Severity": "High"
+      },
+      {
+        "Action": "Bypass",
+        "BaseEventType": 1,
+        "Condition": {
+          "BooleanOperator": "And",
+          "Conditions": [
+            {
+              "Field": "processPath",
+              "Operator": "Match",
+              "Value": "*\\powershell.exe"
+            },
+            {
+              "Field": "parentProcessPath",
+              "Operator": "!Match",
+              "Value": "*\\explorer.exe"
+            }
+          ]
+        },
+        "EventType": "355244ca-c066-4abd-ae37-85ecbc46e9a8",
+        "RuleDescription": "Detects PowerShell execution from non-Explorer parent processes",
+        "RuleName": "Non-Explorer PowerShell Parent Process",
+        "Severity": "Medium"
+      },
+      {
+        "Action": "Bypass",
+        "BaseEventType": 1,
+        "Condition": {
+          "BooleanOperator": "And",
+          "Conditions": [
+            {
+              "Field": "parentVerdict",
+              "Operator": "!Equal",
+              "Value": 1
+            },
+            {
+              "Field": "processPath",
+              "Operator": "Match",
+              "Value": "%systemroot%\\*"
+            }
+          ]
+        },
+        "EventType": "c74ddcbc-a784-48db-b887-d3ba4f25f701",
+        "RuleDescription": "Detects process execution from system directories with untrusted parent",
+        "RuleName": "Suspicious System Process Execution",
+        "Severity": "High"
+      },
+      {
+        "Action": "Bypass",
+        "BaseEventType": 1,
+        "Condition": {
+          "Field": "processVerdict",
+          "Operator": "!Equal",
+          "Value": 1
+        },
+        "EventType": "1775b20b-196d-4f10-bd7b-418d3b40eb77",
+        "RuleDescription": "Detects execution of processes with untrusted verdict",
+        "RuleName": "Untrusted Process Execution",
+        "Severity": "High"
+      }
+    ],
+    "RP2": [],
+    "RP3": [],
+    "RP4": [],
+    "RR1": [
+      {
+        "Action": "Bypass",
+        "BaseEventType": 21,
+        "Condition": {
+          "BooleanOperator": "Or",
+          "Conditions": [
+            {
+              "Field": "processVerdict",
+              "Operator": "!Equal",
+              "Value": 1
+            },
+            {
+              "Field": "parentVerdict",
+              "Operator": "!Equal",
+              "Value": 1
+            },
+            {
+              "Field": "parentProcessPath",
+              "Operator": "MatchInList",
+              "Value": "RegBlackList"
+            },
+            {
+              "Field": "processPath",
+              "Operator": "MatchInList",
+              "Value": "RegBlackList"
+            }
+          ]
+        },
+        "EventType": "1753771182973-zg0ju8za8",
+        "RuleDescription": "Detects Registry key Create from untrusted processes",
+        "RuleName": "Suspicious Registry key create",
+        "Severity": "Medium"
+      }
+    ],
+    "RR2": [
+      {
+        "Action": "Bypass",
+        "BaseEventType": 22,
+        "Condition": {
+          "BooleanOperator": "Or",
+          "Conditions": [
+            {
+              "Field": "processVerdict",
+              "Operator": "!Equal",
+              "Value": 1
+            },
+            {
+              "Field": "parentVerdict",
+              "Operator": "!Equal",
+              "Value": 1
+            },
+            {
+              "Field": "parentProcessPath",
+              "Operator": "MatchInList",
+              "Value": "RegBlackList"
+            },
+            {
+              "Field": "processPath",
+              "Operator": "MatchInList",
+              "Value": "RegBlackList"
+            }
+          ]
+        },
+        "EventType": "1753771182973-zg0ju8za8",
+        "RuleDescription": "Detects Registry key Delete from untrusted processes",
+        "RuleName": "Suspicious Registry key delete",
+        "Severity": "Medium"
+      }
+    ],
+    "RR3": [
+      {
+        "Action": "Bypass",
+        "BaseEventType": 23,
+        "Condition": {
+          "BooleanOperator": "Or",
+          "Conditions": [
+            {
+              "Field": "processVerdict",
+              "Operator": "!Equal",
+              "Value": 1
+            },
+            {
+              "Field": "parentVerdict",
+              "Operator": "!Equal",
+              "Value": 1
+            },
+            {
+              "Field": "parentProcessPath",
+              "Operator": "MatchInList",
+              "Value": "RegBlackList"
+            },
+            {
+              "Field": "processPath",
+              "Operator": "MatchInList",
+              "Value": "RegBlackList"
+            }
+          ]
+        },
+        "EventType": "1753771182973-zg0ju8za8",
+        "RuleDescription": "Detects Registry Value Delete from untrusted processes",
+        "RuleName": "Suspicious Registry Value delete",
+        "Severity": "Medium"
+      }
+    ],
+    "RR4": [
+      {
+        "Action": "Bypass",
+        "BaseEventType": 24,
+        "Condition": {
+          "BooleanOperator": "Or",
+          "Conditions": [
+            {
+              "Field": "processVerdict",
+              "Operator": "!Equal",
+              "Value": 1
+            },
+            {
+              "Field": "parentVerdict",
+              "Operator": "!Equal",
+              "Value": 1
+            },
+            {
+              "Field": "parentProcessPath",
+              "Operator": "MatchInList",
+              "Value": "RegBlackList"
+            },
+            {
+              "Field": "processPath",
+              "Operator": "MatchInList",
+              "Value": "RegBlackList"
+            }
+          ]
+        },
+        "EventType": "1753771182973-zg0ju8za8",
+        "RuleDescription": "Detects Registry key name change from untrusted processes",
+        "RuleName": "Suspicious Registry key name change",
+        "Severity": "Medium"
+      }
+    ],
+    "RR5": [
+      {
+        "Action": "Bypass",
+        "BaseEventType": 25,
+        "Condition": {
+          "BooleanOperator": "And",
+          "Conditions": [
+            {
+              "Field": "registryPath",
+              "Operator": "Match",
+              "Value": "HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Terminal Server"
+            },
+            {
+              "BooleanOperator": "Or",
+              "Conditions": [
+                {
+                  "Field": "registryValueName",
+                  "Operator": "Equal",
+                  "Value": "LocalAccountTokenFilterPolicy"
+                },
+                {
+                  "Field": "registryValueName",
+                  "Operator": "Equal",
+                  "Value": "EnableLinkedConnections"
+                },
+                {
+                  "Field": "registryValueName",
+                  "Operator": "Equal",
+                  "Value": "LongPathsEnabled"
+                }
+              ]
+            },
+            {
+              "Field": "registryValueData",
+              "Operator": "Equal",
+              "Value": "1"
+            }
+          ]
+        },
+        "EventType": "1725595235322867-qos1r234a",
+        "RuleDescription": "Detects changes to LocalAccountTokenFilterPolicy, EnableLinkedConnections, or LongPathsEnabled which control critical system behaviors tag(TA0005,T1112)",
+        "RuleName": "Modification of Critical System Policy Registry Values",
+        "Severity": "Critical"
+      },
+      {
+        "Action": "Bypass",
+        "BaseEventType": 25,
+        "Condition": {
+          "BooleanOperator": "And",
+          "Conditions": [
+            {
+              "Field": "registryPath",
+              "Operator": "Match",
+              "Value": "HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\SecurityProviders\\WDigest*"
+            },
+            {
+              "Field": "registryValueName",
+              "Operator": "Equal",
+              "Value": "UseLogonCredential"
+            },
+            {
+              "Field": "registryValueData",
+              "Operator": "Equal",
+              "Value": "1"
+            }
+          ]
+        },
+        "EventType": "1753955362867-qo55r234a",
+        "RuleDescription": "Detects creation or modification of UseLogonCredential value. Setting this value to 1 enables storage of plaintext logon credentials in LSASS memory and is commonly abused for credential theft. tag(TA0006,T1112)",
+        "RuleName": "Modification of WDigest UseLogonCredential (Potential Credential Exposure)",
+        "Severity": "Critical"
+      },
+      {
+        "Action": "Bypass",
+        "BaseEventType": 25,
+        "Condition": {
+          "BooleanOperator": "And",
+          "Conditions": [
+            {
+              "BooleanOperator": "Or",
+              "Conditions": [
+                {
+                  "Field": "processPath",
+                  "Operator": "MatchInList",
+                  "Value": "RegBlackList"
+                },
+                {
+                  "Field": "parentProcessPath",
+                  "Operator": "MatchInList",
+                  "Value": "RegBlackList"
+                },
+                {
+                  "Field": "processVerdict",
+                  "Operator": "!Equal",
+                  "Value": 1
+                },
+                {
+                  "Field": "parentVerdict",
+                  "Operator": "!Equal",
+                  "Value": 1
+                }
+              ]
+            },
+            {
+              "BooleanOperator": "And",
+              "Conditions": [
+                {
+                  "Field": "registryPath",
+                  "Operator": "Equal",
+                  "Value": "HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System"
+                },
+                {
+                  "Field": "registryValueName",
+                  "Operator": "Equal",
+                  "Value": "EnableLUA"
+                },
+                {
+                  "Field": "registryValueData",
+                  "Operator": "Equal",
+                  "Value": "0"
+                }
+              ]
+            }
+          ]
+        },
+        "EventType": "1753879745926-6na2bugtg",
+        "RuleDescription": "Detects attempts to disable User Account Control via registry modification",
+        "RuleName": "Disable UAC Attempt via registry",
+        "Severity": "Critical"
+      },
+      {
+        "Action": "Bypass",
+        "BaseEventType": 25,
+        "Condition": {
+          "BooleanOperator": "And",
+          "Conditions": [
+            {
+              "BooleanOperator": "Or",
+              "Conditions": [
+                {
+                  "Field": "parentProcessPath",
+                  "Operator": "MatchInList",
+                  "Value": "RegBlackList"
+                },
+                {
+                  "Field": "processPath",
+                  "Operator": "MatchInList",
+                  "Value": "RegBlackList"
+                },
+                {
+                  "Field": "processVerdict",
+                  "Operator": "!Equal",
+                  "Value": 1
+                },
+                {
+                  "Field": "parentVerdict",
+                  "Operator": "!Equal",
+                  "Value": 1
+                }
+              ]
+            },
+            {
+              "BooleanOperator": "And",
+              "Conditions": [
+                {
+                  "Field": "registryPath",
+                  "Operator": "Match",
+                  "Value": "HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\policies\\System"
+                },
+                {
+                  "Field": "registryValueName",
+                  "Operator": "Match",
+                  "Value": "DisableTaskMgr"
+                },
+                {
+                  "Field": "registryValueData",
+                  "Operator": "Equal",
+                  "Value": "1"
+                }
+              ]
+            }
+          ]
+        },
+        "EventType": "1753877624197-6945oluma",
+        "RuleDescription": "Detects  attempts to disable task manager via registry modification",
+        "RuleName": "Disable taskmanager using registry modification",
+        "Severity": "Critical"
+      },
+      {
+        "Action": "Bypass",
+        "BaseEventType": 25,
+        "Condition": {
+          "BooleanOperator": "Or",
+          "Conditions": [
+            {
+              "BooleanOperator": "And",
+              "Conditions": [
+                {
+                  "Field": "registryPath",
+                  "Operator": "Match",
+                  "Value": "HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Command Processor*"
+                },
+                {
+                  "Field": "registryValueName",
+                  "Operator": "Equal",
+                  "Value": "Autorun"
+                }
+              ]
+            },
+            {
+              "BooleanOperator": "And",
+              "Conditions": [
+                {
+                  "Field": "registryPath",
+                  "Operator": "Match",
+                  "Value": "HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Session Manager*"
+                },
+                {
+                  "Field": "registryValueName",
+                  "Operator": "Equal",
+                  "Value": "SetupExecute"
+                }
+              ]
+            }
+          ]
+        },
+        "EventType": "1753877624197-6945afafa",
+        "RuleDescription": "Detects modification of registry values that cause automatic command execution during system startup or when cmd.exe launches. tag(T1547,TA0003)",
+        "RuleName": "Persistence via Command Processor Autorun or SetupExecute Registry Keys",
+        "Severity": "Critical"
+      },
+      {
+        "Action": "Bypass",
+        "BaseEventType": 25,
+        "Condition": {
+          "BooleanOperator": "Or",
+          "Conditions": [
+            {
+              "Field": "registryPath",
+              "Operator": "Match",
+              "Value": "*SOFTWARE\\Classes\\CLSID\\*InprocServer32*"
+            },
+            {
+              "Field": "registryPath",
+              "Operator": "Match",
+              "Value": "*SOFTWARE\\Classes\\CLSID\\*LocalServer32*"
+            },
+            {
+              "Field": "registryPath",
+              "Operator": "Match",
+              "Value": "*SOFTWARE\\Classes\\CLSID\\*TreatAs*"
+            }
+          ]
+        },
+        "EventType": "175395235322867-qo6346234a",
+        "RuleDescription": "This detection rule identifies potential COM hijacking attempts by monitoring changes to key registry locations associated with Component Object Model (COM) class identifiers (CLSIDs). tag(T1546.015,TA0003)",
+        "RuleName": "Suspicious COM Hijacking via CLSID Registry Modification",
+        "Severity": "High"
+      },
+      {
+        "Action": "Bypass",
+        "BaseEventType": 25,
+        "Condition": {
+          "BooleanOperator": "And",
+          "Conditions": [
+            {
+              "Field": "registryPath",
+              "Operator": "Match",
+              "Value": "HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Services\\VSS"
+            },
+            {
+              "BooleanOperator": "Or",
+              "Conditions": [
+                {
+                  "Field": "registryValueName",
+                  "Operator": "Equal",
+                  "Value": "Start"
+                },
+                {
+                  "Field": "registryValueName",
+                  "Operator": "Equal",
+                  "Value": "ImagePath"
+                }
+              ]
+            }
+          ]
+        },
+        "EventType": "1753553322867-qos1r234a",
+        "RuleDescription": "Detects changes to the Windows Volume Shadow Copy Service (VSS) registry settings — specifically modifications to the Start (service start type) or ImagePath (service binary path) values. tag(T1543.003,TA0003)",
+        "RuleName": "Suspicious VSS Service Registry Modification",
+        "Severity": "High"
+      },
+      {
+        "Action": "Bypass",
+        "BaseEventType": 25,
+        "Condition": {
+          "BooleanOperator": "And",
+          "Conditions": [
+            {
+              "BooleanOperator": "Or",
+              "Conditions": [
+                {
+                  "Field": "processPath",
+                  "Operator": "MatchInList",
+                  "Value": "RegBlackList"
+                },
+                {
+                  "Field": "parentProcessPath",
+                  "Operator": "MatchInList",
+                  "Value": "RegBlackList"
+                },
+                {
+                  "Field": "processVerdict",
+                  "Operator": "!Equal",
+                  "Value": 1
+                },
+                {
+                  "Field": "parentVerdict",
+                  "Operator": "!Equal",
+                  "Value": 1
+                }
+              ]
+            },
+            {
+              "BooleanOperator": "And",
+              "Conditions": [
+                {
+                  "Field": "registryPath",
+                  "Operator": "Match",
+                  "Value": "HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Services\\*"
+                },
+                {
+                  "Field": "registryValueName",
+                  "Operator": "Equal",
+                  "Value": "Type"
+                },
+                {
+                  "BooleanOperator": "Or",
+                  "Conditions": [
+                    {
+                      "Field": "registryValueData",
+                      "Operator": "Equal",
+                      "Value": "1"
+                    },
+                    {
+                      "Field": "registryValueData",
+                      "Operator": "Equal",
+                      "Value": "2"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "EventType": "1753879745926-6na2bugtg",
+        "RuleDescription": "Detects Modification of kernel driver services in registry",
+        "RuleName": "Kernel Driver service modification",
+        "Severity": "Medium"
+      },
+      {
+        "Action": "Bypass",
+        "BaseEventType": 25,
+        "Condition": {
+          "BooleanOperator": "And",
+          "Conditions": [
+            {
+              "BooleanOperator": "Or",
+              "Conditions": [
+                {
+                  "Field": "processPath",
+                  "Operator": "MatchInList",
+                  "Value": "RegBlackList"
+                },
+                {
+                  "Field": "parentProcessPath",
+                  "Operator": "MatchInList",
+                  "Value": "RegBlackList"
+                },
+                {
+                  "Field": "processVerdict",
+                  "Operator": "!Equal",
+                  "Value": 1
+                },
+                {
+                  "Field": "parentVerdict",
+                  "Operator": "!Equal",
+                  "Value": 1
+                }
+              ]
+            },
+            {
+              "Field": "registryPath",
+              "Operator": "Match",
+              "Value": "HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Active Setup\\Installed Components\\*"
+            }
+          ]
+        },
+        "EventType": "1753879745926-6na2bugtg",
+        "RuleDescription": "Detects Modification of active Setup Components in registry",
+        "RuleName": "Active Setup modification",
+        "Severity": "Medium"
+      },
+      {
+        "Action": "Bypass",
+        "BaseEventType": 25,
+        "Condition": {
+          "BooleanOperator": "And",
+          "Conditions": [
+            {
+              "BooleanOperator": "Or",
+              "Conditions": [
+                {
+                  "Field": "parentProcessPath",
+                  "Operator": "MatchInList",
+                  "Value": "RegBlackList"
+                },
+                {
+                  "Field": "processPath",
+                  "Operator": "MatchInList",
+                  "Value": "RegBlackList"
+                },
+                {
+                  "Field": "processVerdict",
+                  "Operator": "!Equal",
+                  "Value": 1
+                },
+                {
+                  "Field": "parentVerdict",
+                  "Operator": "!Equal",
+                  "Value": 1
+                }
+              ]
+            },
+            {
+              "BooleanOperator": "Or",
+              "Conditions": [
+                {
+                  "BooleanOperator": "And",
+                  "Conditions": [
+                    {
+                      "Field": "registryPath",
+                      "Operator": "Match",
+                      "Value": "HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Services\\*"
+                    },
+                    {
+                      "Field": "registryValueName",
+                      "Operator": "Equal",
+                      "Value": "ImagePath"
+                    },
+                    {
+                      "Field": "registryValueData",
+                      "Operator": "Match",
+                      "Value": "*svchost.exe*"
+                    }
+                  ]
+                },
+                {
+                  "BooleanOperator": "And",
+                  "Conditions": [
+                    {
+                      "Field": "registryPath",
+                      "Operator": "Match",
+                      "Value": "HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Services\\*\\Parameters"
+                    },
+                    {
+                      "Field": "registryValueName",
+                      "Operator": "Equal",
+                      "Value": "ServiceDll"
+                    },
+                    {
+                      "Field": "registryValueData",
+                      "Operator": "Match",
+                      "Value": "*.dll"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "EventType": "1753955362867-qos9yp5fa",
+        "RuleDescription": "Detects modification of service ImagePath or ServiceDll values",
+        "RuleName": "Service ImagePath or DLL Modification",
+        "Severity": "Medium"
+      },
+      {
+        "Action": "Bypass",
+        "BaseEventType": 25,
+        "Condition": {
+          "BooleanOperator": "And",
+          "Conditions": [
+            {
+              "BooleanOperator": "Or",
+              "Conditions": [
+                {
+                  "Field": "parentProcessPath",
+                  "Operator": "MatchInList",
+                  "Value": "RegBlackList"
+                },
+                {
+                  "Field": "processPath",
+                  "Operator": "MatchInList",
+                  "Value": "RegBlackList"
+                },
+                {
+                  "Field": "processVerdict",
+                  "Operator": "!Equal",
+                  "Value": 1
+                },
+                {
+                  "Field": "parentVerdict",
+                  "Operator": "!Equal",
+                  "Value": 1
+                }
+              ]
+            },
+            {
+              "BooleanOperator": "And",
+              "Conditions": [
+                {
+                  "Field": "registryPath",
+                  "Operator": "Equal",
+                  "Value": "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\PowerShell\\1\\ShellIds\\Microsoft.PowerShell"
+                },
+                {
+                  "Field": "registryValueName",
+                  "Operator": "Equal",
+                  "Value": "ExecutionPolicy"
+                }
+              ]
+            }
+          ]
+        },
+        "EventType": "1753955362867-qos9yp5fa",
+        "RuleDescription": "Detects modification of PowerShell execution policy",
+        "RuleName": "PowerShell Execution Policy Modification",
+        "Severity": "Medium"
+      },
+      {
+        "Action": "Bypass",
+        "BaseEventType": 25,
+        "Condition": {
+          "BooleanOperator": "And",
+          "Conditions": [
+            {
+              "BooleanOperator": "Or",
+              "Conditions": [
+                {
+                  "Field": "parentProcessPath",
+                  "Operator": "MatchInList",
+                  "Value": "RegBlackList"
+                },
+                {
+                  "Field": "processPath",
+                  "Operator": "MatchInList",
+                  "Value": "RegBlackList"
+                },
+                {
+                  "Field": "processVerdict",
+                  "Operator": "!Equal",
+                  "Value": 1
+                },
+                {
+                  "Field": "parentVerdict",
+                  "Operator": "!Equal",
+                  "Value": 1
+                }
+              ]
+            },
+            {
+              "BooleanOperator": "And",
+              "Conditions": [
+                {
+                  "Field": "registryPath",
+                  "Operator": "Match",
+                  "Value": "HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Services\\*"
+                },
+                {
+                  "Field": "registryValueName",
+                  "Operator": "Equal",
+                  "Value": "ImagePath"
+                },
+                {
+                  "Field": "registryValueData",
+                  "Operator": "!Match",
+                  "Value": "*svchost.exe*"
+                },
+                {
+                  "Field": "registryValueData",
+                  "Operator": "Match",
+                  "Value": "*.exe*"
+                }
+              ]
+            }
+          ]
+        },
+        "EventType": "1753955362867-qos9yp5fa",
+        "RuleDescription": "Detects modification of service binary paths to non-svchost executables",
+        "RuleName": "Service Binary Path Modification",
+        "Severity": "Medium"
+      },
+      {
+        "Action": "Bypass",
+        "BaseEventType": 25,
+        "Condition": {
+          "BooleanOperator": "And",
+          "Conditions": [
+            {
+              "BooleanOperator": "Or",
+              "Conditions": [
+                {
+                  "Field": "parentProcessPath",
+                  "Operator": "MatchInList",
+                  "Value": "RegBlackList"
+                },
+                {
+                  "Field": "processPath",
+                  "Operator": "MatchInList",
+                  "Value": "RegBlackList"
+                },
+                {
+                  "Field": "processVerdict",
+                  "Operator": "!Equal",
+                  "Value": 1
+                },
+                {
+                  "Field": "parentVerdict",
+                  "Operator": "!Equal",
+                  "Value": 1
+                }
+              ]
+            },
+            {
+              "Field": "registryPath",
+              "Operator": "Match",
+              "Value": "HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Services\\SharedAccess\\Parameters\\FirewallPolicy\\StandardProfile*"
+            }
+          ]
+        },
+        "EventType": "1753955362867-qos9yp5fa",
+        "RuleDescription": "Detects modification of Windows Firewall standard profile settings",
+        "RuleName": "Firewall Policy Modification",
+        "Severity": "Medium"
+      },
+      {
+        "Action": "Bypass",
+        "BaseEventType": 25,
+        "Condition": {
+          "BooleanOperator": "And",
+          "Conditions": [
+            {
+              "BooleanOperator": "Or",
+              "Conditions": [
+                {
+                  "Field": "parentProcessPath",
+                  "Operator": "MatchInList",
+                  "Value": "RegBlackList"
+                },
+                {
+                  "Field": "processPath",
+                  "Operator": "MatchInList",
+                  "Value": "RegBlackList"
+                },
+                {
+                  "Field": "processVerdict",
+                  "Operator": "!Equal",
+                  "Value": 1
+                },
+                {
+                  "Field": "parentVerdict",
+                  "Operator": "!Equal",
+                  "Value": 1
+                }
+              ]
+            },
+            {
+              "Field": "registryPath",
+              "Operator": "Equal",
+              "Value": "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\\DisallowRun"
+            }
+          ]
+        },
+        "EventType": "1753955362867-qos9yp5fa",
+        "RuleDescription": "Detects modification of DisallowRun registry key which restricts application execution",
+        "RuleName": "DisallowRun Modification",
+        "Severity": "Medium"
+      },
+      {
+        "Action": "Bypass",
+        "BaseEventType": 25,
+        "Condition": {
+          "BooleanOperator": "And",
+          "Conditions": [
+            {
+              "BooleanOperator": "Or",
+              "Conditions": [
+                {
+                  "Field": "parentProcessPath",
+                  "Operator": "MatchInList",
+                  "Value": "RegBlackList"
+                },
+                {
+                  "Field": "processPath",
+                  "Operator": "MatchInList",
+                  "Value": "RegBlackList"
+                },
+                {
+                  "Field": "processVerdict",
+                  "Operator": "!Equal",
+                  "Value": 1
+                },
+                {
+                  "Field": "parentVerdict",
+                  "Operator": "!Equal",
+                  "Value": 1
+                }
+              ]
+            },
+            {
+              "BooleanOperator": "And",
+              "Conditions": [
+                {
+                  "Field": "registryPath",
+                  "Operator": "Equal",
+                  "Value": "HKEY_CURRENT_USER\\Software\\Policies\\Microsoft\\Windows\\System"
+                },
+                {
+                  "Field": "registryValueName",
+                  "Operator": "Equal",
+                  "Value": "DisableCMD"
+                },
+                {
+                  "Field": "registryValueData",
+                  "Operator": "Equal",
+                  "Value": "2"
+                }
+              ]
+            }
+          ]
+        },
+        "EventType": "1753955362867-qos9yp5fa",
+        "RuleDescription": "Detects attempts to disable Command Prompt via registry modification",
+        "RuleName": "Disable CMD Attempt",
+        "Severity": "Medium"
+      },
+      {
+        "Action": "Bypass",
+        "BaseEventType": 25,
+        "Condition": {
+          "BooleanOperator": "And",
+          "Conditions": [
+            {
+              "BooleanOperator": "Or",
+              "Conditions": [
+                {
+                  "Field": "parentProcessPath",
+                  "Operator": "MatchInList",
+                  "Value": "RegBlackList"
+                },
+                {
+                  "Field": "processPath",
+                  "Operator": "MatchInList",
+                  "Value": "RegBlackList"
+                },
+                {
+                  "Field": "processVerdict",
+                  "Operator": "!Equal",
+                  "Value": 1
+                },
+                {
+                  "Field": "parentVerdict",
+                  "Operator": "!Equal",
+                  "Value": 1
+                }
+              ]
+            },
+            {
+              "BooleanOperator": "And",
+              "Conditions": [
+                {
+                  "Field": "registryPath",
+                  "Operator": "Equal",
+                  "Value": "HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System"
+                },
+                {
+                  "Field": "registryValueName",
+                  "Operator": "Equal",
+                  "Value": "DisableRegistryTools"
+                },
+                {
+                  "Field": "registryValueData",
+                  "Operator": "Equal",
+                  "Value": "1"
+                }
+              ]
+            }
+          ]
+        },
+        "EventType": "1753955362867-qos9yp5fa",
+        "RuleDescription": "Detects attempts to disable registry tools via registry modification",
+        "RuleName": "Disable Registry Tools Attempt",
+        "Severity": "Medium"
+      },
+      {
+        "Action": "Bypass",
+        "BaseEventType": 25,
+        "Condition": {
+          "BooleanOperator": "And",
+          "Conditions": [
+            {
+              "BooleanOperator": "Or",
+              "Conditions": [
+                {
+                  "Field": "parentProcessPath",
+                  "Operator": "MatchInList",
+                  "Value": "RegBlackList"
+                },
+                {
+                  "Field": "processPath",
+                  "Operator": "MatchInList",
+                  "Value": "RegBlackList"
+                },
+                {
+                  "Field": "processVerdict",
+                  "Operator": "!Equal",
+                  "Value": 1
+                },
+                {
+                  "Field": "parentVerdict",
+                  "Operator": "!Equal",
+                  "Value": 1
+                }
+              ]
+            },
+            {
+              "BooleanOperator": "And",
+              "Conditions": [
+                {
+                  "Field": "registryPath",
+                  "Operator": "Equal",
+                  "Value": "HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Services\\Tcpip\\Parameters"
+                },
+                {
+                  "Field": "registryValueName",
+                  "Operator": "Equal",
+                  "Value": "DataBasePath"
+                }
+              ]
+            }
+          ]
+        },
+        "EventType": "1753955362867-qos9yp5fa",
+        "RuleDescription": "Detects modification of TCP/IP database path which could indicate DNS hijacking",
+        "RuleName": "TCP/IP Database Path Modification",
+        "Severity": "Medium"
+      },
+      {
+        "Action": "Bypass",
+        "BaseEventType": 25,
+        "Condition": {
+          "BooleanOperator": "And",
+          "Conditions": [
+            {
+              "BooleanOperator": "Or",
+              "Conditions": [
+                {
+                  "Field": "parentProcessPath",
+                  "Operator": "MatchInList",
+                  "Value": "RegBlackList"
+                },
+                {
+                  "Field": "processPath",
+                  "Operator": "MatchInList",
+                  "Value": "RegBlackList"
+                },
+                {
+                  "Field": "processVerdict",
+                  "Operator": "!Equal",
+                  "Value": 1
+                },
+                {
+                  "Field": "parentVerdict",
+                  "Operator": "!Equal",
+                  "Value": 1
+                }
+              ]
+            },
+            {
+              "BooleanOperator": "And",
+              "Conditions": [
+                {
+                  "Field": "registryPath",
+                  "Operator": "Equal",
+                  "Value": "HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Windows"
+                },
+                {
+                  "Field": "registryValueName",
+                  "Operator": "Equal",
+                  "Value": "AppInit_DLLs"
+                }
+              ]
+            }
+          ]
+        },
+        "EventType": "1753955362867-qos9yp5fa",
+        "RuleDescription": "Detects modification of AppInit_DLLs registry value which loads DLLs into every process",
+        "RuleName": "AppInit DLLs Modification",
+        "Severity": "Medium"
+      },
+      {
+        "Action": "Bypass",
+        "BaseEventType": 25,
+        "Condition": {
+          "BooleanOperator": "And",
+          "Conditions": [
+            {
+              "BooleanOperator": "Or",
+              "Conditions": [
+                {
+                  "Field": "parentProcessPath",
+                  "Operator": "MatchInList",
+                  "Value": "RegBlackList"
+                },
+                {
+                  "Field": "processPath",
+                  "Operator": "MatchInList",
+                  "Value": "RegBlackList"
+                },
+                {
+                  "Field": "processVerdict",
+                  "Operator": "!Equal",
+                  "Value": 1
+                },
+                {
+                  "Field": "parentVerdict",
+                  "Operator": "!Equal",
+                  "Value": 1
+                }
+              ]
+            },
+            {
+              "BooleanOperator": "And",
+              "Conditions": [
+                {
+                  "Field": "registryPath",
+                  "Operator": "Match",
+                  "Value": "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Services\\*"
+                },
+                {
+                  "Field": "registryValueName",
+                  "Operator": "Equal",
+                  "Value": "Start"
+                },
+                {
+                  "Field": "registryValueData",
+                  "Operator": "Equal",
+                  "Value": "4"
+                }
+              ]
+            }
+          ]
+        },
+        "EventType": "1753955362867-qos9yp5fa",
+        "RuleDescription": "Detects attempts to disable services via registry modification ",
+        "RuleName": " Disable Service via Registry",
+        "Severity": "Medium"
+      },
+      {
+        "Action": "Bypass",
+        "BaseEventType": 25,
+        "Condition": {
+          "BooleanOperator": "And",
+          "Conditions": [
+            {
+              "BooleanOperator": "Or",
+              "Conditions": [
+                {
+                  "Field": "parentProcessPath",
+                  "Operator": "MatchInList",
+                  "Value": "RegBlackList"
+                },
+                {
+                  "Field": "processPath",
+                  "Operator": "MatchInList",
+                  "Value": "RegBlackList"
+                },
+                {
+                  "Field": "processVerdict",
+                  "Operator": "!Equal",
+                  "Value": 1
+                },
+                {
+                  "Field": "parentVerdict",
+                  "Operator": "!Equal",
+                  "Value": 1
+                }
+              ]
+            },
+            {
+              "BooleanOperator": "And",
+              "Conditions": [
+                {
+                  "Field": "registryPath",
+                  "Operator": "Match",
+                  "Value": "HKEY_LOCal_MACHINE\\SYSTEM\\CurrentControlSet\\Services\\Tcpip\\Parameters\\Interfaces\\*"
+                },
+                {
+                  "Field": "registryValueName",
+                  "Operator": "Equal",
+                  "Value": "NameServer"
+                }
+              ]
+            }
+          ]
+        },
+        "EventType": "1753955362867-qos9yp5fa",
+        "RuleDescription": "Detects suspicious registry modifications to DNS server settings under network interface configurations",
+        "RuleName": " Suspicious Modification of DNS Settings via Registry",
+        "Severity": "Medium"
+      },
+      {
+        "Action": "Bypass",
+        "BaseEventType": 25,
+        "Condition": {
+          "BooleanOperator": "And",
+          "Conditions": [
+            {
+              "BooleanOperator": "Or",
+              "Conditions": [
+                {
+                  "Field": "parentProcessPath",
+                  "Operator": "MatchInList",
+                  "Value": "RegBlackList"
+                },
+                {
+                  "Field": "processPath",
+                  "Operator": "MatchInList",
+                  "Value": "RegBlackList"
+                },
+                {
+                  "Field": "processVerdict",
+                  "Operator": "!Equal",
+                  "Value": 1
+                },
+                {
+                  "Field": "parentVerdict",
+                  "Operator": "!Equal",
+                  "Value": 1
+                }
+              ]
+            },
+            {
+              "BooleanOperator": "And",
+              "Conditions": [
+                {
+                  "Field": "registryPath",
+                  "Operator": "Equal",
+                  "Value": "HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Session Manager"
+                },
+                {
+                  "Field": "registryValueName",
+                  "Operator": "Equal",
+                  "Value": "BootExecute"
+                }
+              ]
+            }
+          ]
+        },
+        "EventType": "1753955362867-qos9yp5fa",
+        "RuleDescription": "This rule detects changes to the 'BootExecute' registry value",
+        "RuleName": "Modification of BootExecute Registry Key",
+        "Severity": "Medium"
+      },
+      {
+        "Action": "Bypass",
+        "BaseEventType": 25,
+        "Condition": {
+          "BooleanOperator": "And",
+          "Conditions": [
+            {
+              "BooleanOperator": "Or",
+              "Conditions": [
+                {
+                  "Field": "parentProcessPath",
+                  "Operator": "MatchInList",
+                  "Value": "RegBlackList"
+                },
+                {
+                  "Field": "processPath",
+                  "Operator": "MatchInList",
+                  "Value": "RegBlackList"
+                },
+                {
+                  "Field": "processVerdict",
+                  "Operator": "!Equal",
+                  "Value": 1
+                },
+                {
+                  "Field": "parentVerdict",
+                  "Operator": "!Equal",
+                  "Value": 1
+                }
+              ]
+            },
+            {
+              "Field": "registryPath",
+              "Operator": "Equal",
+              "Value": "HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Services\\Lanmanserver\\Shares"
+            }
+          ]
+        },
+        "EventType": "1753955362867-qos9yp5fa",
+        "RuleDescription": "This rule detects changes to the registry key controlling Windows file shares under 'Lanmanserver\\Shares'",
+        "RuleName": "Suspicious Modification of Windows Network Shares",
+        "Severity": "Medium"
+      },
+      {
+        "Action": "Bypass",
+        "BaseEventType": 25,
+        "Condition": {
+          "BooleanOperator": "And",
+          "Conditions": [
+            {
+              "BooleanOperator": "Or",
+              "Conditions": [
+                {
+                  "Field": "parentProcessPath",
+                  "Operator": "MatchInList",
+                  "Value": "RegBlackList"
+                },
+                {
+                  "Field": "processPath",
+                  "Operator": "MatchInList",
+                  "Value": "RegBlackList"
+                },
+                {
+                  "Field": "processVerdict",
+                  "Operator": "!Equal",
+                  "Value": 1
+                },
+                {
+                  "Field": "parentVerdict",
+                  "Operator": "!Equal",
+                  "Value": 1
+                }
+              ]
+            }
+          ]
+        },
+        "EventType": "1753955362867-qos9yp5fa",
+        "RuleDescription": "This generic rule flags any registry activity initiated by an untrusted process",
+        "RuleName": " Suspicious Registry Modification by Untrusted Process",
+        "Severity": "Medium"
+      },
+      {
+        "Action": "Bypass",
+        "BaseEventType": 25,
+        "Condition": {
+          "BooleanOperator": "And",
+          "Conditions": [
+            {
+              "BooleanOperator": "Or",
+              "Conditions": [
+                {
+                  "Field": "parentProcessPath",
+                  "Operator": "MatchInList",
+                  "Value": "RegBlackList"
+                },
+                {
+                  "Field": "processPath",
+                  "Operator": "MatchInList",
+                  "Value": "RegBlackList"
+                },
+                {
+                  "Field": "processVerdict",
+                  "Operator": "!Equal",
+                  "Value": 1
+                },
+                {
+                  "Field": "parentVerdict",
+                  "Operator": "!Equal",
+                  "Value": 1
+                }
+              ]
+            },
+            {
+              "BooleanOperator": "And",
+              "Conditions": [
+                {
+                  "Field": "registryPath",
+                  "Operator": "Equal",
+                  "Value": "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced"
+                },
+                {
+                  "BooleanOperator": "Or",
+                  "Conditions": [
+                    {
+                      "Field": "registryValueName",
+                      "Operator": "Equal",
+                      "Value": "Hidden"
+                    },
+                    {
+                      "Field": "registryValueName",
+                      "Operator": "Equal",
+                      "Value": "ShowSuperHidden"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "EventType": "1753955362867-qos9yp5fa",
+        "RuleDescription": "This rule detects registry changes that disable the display of hidden and system files in File Explorer.",
+        "RuleName": "Hidden and System Files Visibility Disabled",
+        "Severity": "Medium"
+      },
+      {
+        "Action": "Bypass",
+        "BaseEventType": 25,
+        "Condition": {
+          "BooleanOperator": "And",
+          "Conditions": [
+            {
+              "BooleanOperator": "Or",
+              "Conditions": [
+                {
+                  "Field": "parentProcessPath",
+                  "Operator": "MatchInList",
+                  "Value": "RegBlackList"
+                },
+                {
+                  "Field": "processPath",
+                  "Operator": "MatchInList",
+                  "Value": "RegBlackList"
+                },
+                {
+                  "Field": "processVerdict",
+                  "Operator": "!Equal",
+                  "Value": 1
+                },
+                {
+                  "Field": "parentVerdict",
+                  "Operator": "!Equal",
+                  "Value": 1
+                }
+              ]
+            },
+            {
+              "BooleanOperator": "Or",
+              "Conditions": [
+                {
+                  "Field": "registryPath",
+                  "Operator": "Match",
+                  "Value": "HKEY_LOCAL_MACHINE\\Software\\Policies\\Microsoft\\Windows\\System\\Scripts\\Startup*"
+                },
+                {
+                  "Field": "registryPath",
+                  "Operator": "Match",
+                  "Value": "HKEY_CURRENT_USER\\Software\\Policies\\Microsoft\\Windows\\System\\Scripts\\Logon*"
+                },
+                {
+                  "Field": "registryPath",
+                  "Operator": "Match",
+                  "Value": "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System*"
+                },
+                {
+                  "Field": "registryPath",
+                  "Operator": "Equal",
+                  "Value": "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run"
+                },
+                {
+                  "Field": "registryPath",
+                  "Operator": "Match",
+                  "Value": "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\RunOnceEx*"
+                },
+                {
+                  "Field": "registryPath",
+                  "Operator": "Match",
+                  "Value": "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\RunOnce*"
+                },
+                {
+                  "Field": "registryPath",
+                  "Operator": "Match",
+                  "Value": "HKEY_CURRENT_USER\\Software\\Microsoft\\WindowsNT\\CurrentVersion\\Windows*"
+                },
+                {
+                  "Field": "registryPath",
+                  "Operator": "Match",
+                  "Value": "HKEY_CURRENT_USER\\Software\\Microsoft\\WindowsNT\\CurrentVersion\\Windows\\Run*"
+                },
+                {
+                  "Field": "registryPath",
+                  "Operator": "Match",
+                  "Value": "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\\Run*"
+                },
+                {
+                  "Field": "registryPath",
+                  "Operator": "Match",
+                  "Value": "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer\\Run*"
+                },
+                {
+                  "Field": "registryPath",
+                  "Operator": "Equal",
+                  "Value": "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Run"
+                },
+                {
+                  "Field": "registryPath",
+                  "Operator": "Equal",
+                  "Value": "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\RunOnce"
+                },
+                {
+                  "Field": "registryPath",
+                  "Operator": "Match",
+                  "Value": "HKEY_CURRENT_USER\\Software\\Policies\\Microsoft\\Windows\\System\\Scripts\\Logoff*"
+                },
+                {
+                  "Field": "registryPath",
+                  "Operator": "Match",
+                  "Value": "HKEY_LOCAL_MACHINE\\Software\\Policies\\Microsoft\\Windows\\System\\Scripts\\Shutdown*"
+                },
+                {
+                  "Field": "registryPath",
+                  "Operator": "Match",
+                  "Value": "*Microsoft\\Windows\\CurrentVersion\\Explorer\\User Shell Folders\\Startup*"
+                },
+                {
+                  "BooleanOperator": "And",
+                  "Conditions": [
+                    {
+                      "Field": "registryPath",
+                      "Operator": "Match",
+                      "Value": "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Accessibility\\ATs*"
+                    },
+                    {
+                      "Field": "registryValueName",
+                      "Operator": "Equal",
+                      "Value": "StartExe"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "EventType": "1753955362867-qos9yp5fa",
+        "RuleDescription": "Monitors known registry paths used for persistence via auto-start entries and policy-based script execution.",
+        "RuleName": "Windows Registry Auto-Start Path Monitoring",
+        "Severity": "Medium"
+      },
+      {
+        "Action": "Bypass",
+        "BaseEventType": 25,
+        "Condition": {
+          "BooleanOperator": "And",
+          "Conditions": [
+            {
+              "BooleanOperator": "Or",
+              "Conditions": [
+                {
+                  "Field": "parentProcessPath",
+                  "Operator": "MatchInList",
+                  "Value": "RegBlackList"
+                },
+                {
+                  "Field": "processPath",
+                  "Operator": "MatchInList",
+                  "Value": "RegBlackList"
+                },
+                {
+                  "Field": "processVerdict",
+                  "Operator": "!Equal",
+                  "Value": 1
+                },
+                {
+                  "Field": "parentVerdict",
+                  "Operator": "!Equal",
+                  "Value": 1
+                }
+              ]
+            },
+            {
+              "BooleanOperator": "Or",
+              "Conditions": [
+                {
+                  "Field": "registryPath",
+                  "Operator": "Match",
+                  "Value": "HKEY_LOCAL_MACHINE\\SOFTWARE\\Classes\\PROTOCOLS\\Filter*"
+                },
+                {
+                  "Field": "registryPath",
+                  "Operator": "Match",
+                  "Value": "HKEY_LOCAL_MACHINE\\SOFTWARE\\Classes\\PROTOCOLS\\Handler*"
+                },
+                {
+                  "Field": "registryPath",
+                  "Operator": "Match",
+                  "Value": "HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Internet Explorer\\Desktop\\Components*"
+                },
+                {
+                  "Field": "registryPath",
+                  "Operator": "Match",
+                  "Value": "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Active Setup\\Installed Components*"
+                },
+                {
+                  "Field": "registryPath",
+                  "Operator": "Equal",
+                  "Value": "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\SharedTaskScheduler"
+                },
+                {
+                  "Field": "registryPath",
+                  "Operator": "Match",
+                  "Value": "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\ShellServiceObjectDelayLoad*"
+                },
+                {
+                  "Field": "registryPath",
+                  "Operator": "Match",
+                  "Value": "HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\ShellServiceObjectDelayLoad*"
+                },
+                {
+                  "Field": "registryPath",
+                  "Operator": "Match",
+                  "Value": "HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\ShellExecuteHooks*"
+                },
+                {
+                  "Field": "registryPath",
+                  "Operator": "Match",
+                  "Value": "HKEY_CURRENT_USER\\Software\\Classes\\*\\ShellEx\\ContextMenuHandlers*"
+                },
+                {
+                  "Field": "registryPath",
+                  "Operator": "Match",
+                  "Value": "HKEY_LOCAL_MACHINE\\Software\\Classes\\*\\ShellEx\\ContextMenuHandlers*"
+                },
+                {
+                  "Field": "registryPath",
+                  "Operator": "Match",
+                  "Value": "HKEY_CURRENT_USER\\Software\\Classes\\AllFileSystemObjects\\ShellEx\\ContextMenuHandlers*"
+                },
+                {
+                  "Field": "registryPath",
+                  "Operator": "Match",
+                  "Value": "HKEY_LOCAL_MACHINE\\Software\\Classes\\AllFileSystemObjects\\ShellEx\\ContextMenuHandlers*"
+                },
+                {
+                  "Field": "registryPath",
+                  "Operator": "Match",
+                  "Value": "HKEY_CURRENT_USER\\Software\\Classes\\Directory\\ShellEx\\ContextMenuHandlers*"
+                },
+                {
+                  "Field": "registryPath",
+                  "Operator": "Match",
+                  "Value": "HKEY_LOCAL_MACHINE\\Software\\Classes\\Directory\\ShellEx\\ContextMenuHandlers*"
+                },
+                {
+                  "Field": "registryPath",
+                  "Operator": "Match",
+                  "Value": "HKEY_CURRENT_USER\\Software\\Classes\\Directory\\Shellex\\DragDropHandlers*"
+                },
+                {
+                  "Field": "registryPath",
+                  "Operator": "Match",
+                  "Value": "HKEY_LOCAL_MACHINE\\Software\\Classes\\Directory\\Shellex\\DragDropHandlers*"
+                },
+                {
+                  "Field": "registryPath",
+                  "Operator": "Match",
+                  "Value": "HKEY_CURRENT_USER\\Software\\Classes\\Directory\\Shellex\\PropertySheetHandlers*"
+                },
+                {
+                  "Field": "registryPath",
+                  "Operator": "Match",
+                  "Value": "HKEY_LOCAL_MACHINE\\Software\\Classes\\Directory\\Shellex\\PropertySheetHandlers*"
+                },
+                {
+                  "Field": "registryPath",
+                  "Operator": "Match",
+                  "Value": "HKEY_CURRENT_USER\\Software\\Classes\\Directory\\Shellex\\CopyHookHandlers*"
+                },
+                {
+                  "Field": "registryPath",
+                  "Operator": "Match",
+                  "Value": "HKEY_LOCAL_MACHINE\\Software\\Classes\\Directory\\Shellex\\CopyHookHandlers*"
+                },
+                {
+                  "Field": "registryPath",
+                  "Operator": "Match",
+                  "Value": "HKEY_CURRENT_USER\\Software\\Classes\\Folder\\Shellex\\ColumnHandlers*"
+                },
+                {
+                  "Field": "registryPath",
+                  "Operator": "Match",
+                  "Value": "HKEY_LOCAL_MACHINE\\Software\\Classes\\Folder\\Shellex\\ColumnHandlers*"
+                },
+                {
+                  "Field": "registryPath",
+                  "Operator": "Match",
+                  "Value": "HKEY_CURRENT_USER\\Software\\Classes\\Folder\\ShellEx\\ContextMenuHandlers*"
+                },
+                {
+                  "Field": "registryPath",
+                  "Operator": "Match",
+                  "Value": "HKEY_LOCAL_MACHINE\\Software\\Classes\\Folder\\ShellEx\\ContextMenuHandlers*"
+                },
+                {
+                  "Field": "registryPath",
+                  "Operator": "Match",
+                  "Value": "HKEY_CURRENT_USER\\Software\\Classes\\Directory\\Background\\ShellEx\\ContextMenuHandlers*"
+                },
+                {
+                  "Field": "registryPath",
+                  "Operator": "Match",
+                  "Value": "HKEY_LOCAL_MACHINE\\Software\\Classes\\Directory\\Background\\ShellEx\\ContextMenuHandlers*"
+                },
+                {
+                  "Field": "registryPath",
+                  "Operator": "Match",
+                  "Value": "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\ShellIconOverlayIdentifiers*"
+                },
+                {
+                  "Field": "registryPath",
+                  "Operator": "Match",
+                  "Value": "HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\ShellIconOverlayIdentifiers*"
+                },
+                {
+                  "Field": "registryPath",
+                  "Operator": "Match",
+                  "Value": "HKEY_CURRENT_USER\\Software\\Microsoft\\Ctf\\LangBarAddin*"
+                },
+                {
+                  "Field": "registryPath",
+                  "Operator": "Match",
+                  "Value": "HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Ctf\\LangBarAddin*"
+                },
+                {
+                  "Field": "registryPath",
+                  "Operator": "Match",
+                  "Value": "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Shell Extensions\\Approved*"
+                },
+                {
+                  "Field": "registryPath",
+                  "Operator": "Match",
+                  "Value": "HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows\\CurrentVersion\\Shell Extensions\\Approved*"
+                }
+              ]
+            }
+          ]
+        },
+        "EventType": "1753955362867-qos9yp5fa",
+        "RuleDescription": "Monitors registry paths used for shell extensions, context menu handlers, drag-and-drop handlers, and COM object hijacks which are commonly abused for persistence.",
+        "RuleName": "Registry Shell Extensions and COM Hijack Monitoring",
+        "Severity": "Medium"
+      },
+      {
+        "Action": "Bypass",
+        "BaseEventType": 25,
+        "Condition": {
+          "BooleanOperator": "And",
+          "Conditions": [
+            {
+              "Field": "registryPath",
+              "Operator": "Match",
+              "Value": "HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System\\CredSSP\\Parameters*"
+            },
+            {
+              "Field": "registryValueName",
+              "Operator": "Equal",
+              "Value": "NameServer"
+            },
+            {
+              "Field": "registryValueData",
+              "Operator": "!Equal",
+              "Value": "0"
+            }
+          ]
+        },
+        "EventType": "1753955362867-qos1r234a",
+        "RuleDescription": "Detects changes to the AllowEncryptionOracle registry value that could weaken RDP encryption requirements. tag(TA0005,T1112)",
+        "RuleName": "Modification of CredSSP AllowEncryptionOracle Registry Value",
+        "Severity": "Medium"
+      },
+      {
+        "Action": "Bypass",
+        "BaseEventType": 25,
+        "Condition": {
+          "BooleanOperator": "And",
+          "Conditions": [
+            {
+              "Field": "registryPath",
+              "Operator": "Match",
+              "Value": "HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Services\\Netlogon\\Parameters\\DisablePasswordChange"
+            },
+            {
+              "Field": "registryValueName",
+              "Operator": "Equal",
+              "Value": "DisablePasswordChange"
+            },
+            {
+              "Field": "registryValueData",
+              "Operator": "Equal",
+              "Value": "1"
+            }
+          ]
+        },
+        "EventType": "175395235322867-qos1r234a",
+        "RuleDescription": "Detects creation or modification of Terminal Server session-control registry values, changes can enable multiple concurrent RDP sessions. tag(T1112,TA0005)",
+        "RuleName": "Modification of Terminal Server Session-Control Registry Values",
+        "Severity": "Medium"
+      },
+      {
+        "Action": "Bypass",
+        "BaseEventType": 25,
+        "Condition": {
+          "BooleanOperator": "And",
+          "Conditions": [
+            {
+              "Field": "registryPath",
+              "Operator": "Match",
+              "Value": "HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Terminal Server"
+            },
+            {
+              "BooleanOperator": "Or",
+              "Conditions": [
+                {
+                  "Field": "registryValueName",
+                  "Operator": "Equal",
+                  "Value": "fSingleSessionPerUser"
+                },
+                {
+                  "Field": "registryValueName",
+                  "Operator": "Equal",
+                  "Value": "AllowMultipleTSSessions"
+                }
+              ]
+            },
+            {
+              "Field": "registryValueData",
+              "Operator": "Equal",
+              "Value": "0"
+            }
+          ]
+        },
+        "EventType": "1753952522867-qos1r234a",
+        "RuleDescription": "Detects when the Netlogon parameter DisablePasswordChange is set to 1. Setting this value to 1 prevents a domain-joined computer from automatically changing its machine account password with the domain controller. tag(T1098,TA0003)",
+        "RuleName": "Netlogon Disable Machine-Account Password Changes",
+        "Severity": "Medium"
+      }
+    ]
+  },
+  "Lists": {
+    "BlockList": [
+      "*\\powershell.exe"
+    ],
+    "EmailPaths": [
+      "*\\thunderbird.exe",
+      "*\\outlook.exe"
+    ],
+    "InfectibleFiles": [
+      "*.lnk",
+      "*.wsf",
+      "*.hta",
+      "*.mhtml",
+      "*.html",
+      "*.doc",
+      "*.docm",
+      "*.xls",
+      "*.xlsm",
+      "*.ppt",
+      "*.pptm",
+      "*.chm",
+      "*.vbs",
+      "*.js",
+      "*.bat",
+      "*.pif",
+      "*.pdf",
+      "*.jar",
+      "*.sys"
+    ],
+    "NetworkBlackList": [
+      "powershell.exe",
+      "pwsh.exe",
+      "cmd.exe",
+      "wscript.exe",
+      "cscript.exe",
+      "mshta.exe",
+      "rundll32.exe",
+      "regsvr32.exe",
+      "msiexec.exe",
+      "bitsadmin.exe",
+      "installutil.exe",
+      "wmic.exe",
+      "schtasks.exe",
+      "excel.exe",
+      "winword.exe",
+      "outlook.exe",
+      "python.exe",
+      "perl.exe",
+      "ruby.exe",
+      "node.exe",
+      "java.exe"
+    ],
+    "RegBlackList": [
+      "*\\powershell.exe",
+      "*\\regedit.exe",
+      "*\\reg.exe",
+      "*\\cscript.exe",
+      "*\\wscript.exe"
+    ],
+    "Shells": [
+      "cmd.exe",
+      "powershell.exe",
+      "pwsh.exe",
+      "wscript.exe",
+      "cscript.exe",
+      "mshta.exe",
+      "regsvr32.exe",
+      "msiexec.exe",
+      "rundll32.exe",
+      "python.exe",
+      "perl.exe",
+      "ruby.exe",
+      "node.exe",
+      "java.exe"
+    ],
+    "WriteFileBlackList": [
+      "*\\powershell.exe",
+      "*\\cmd.exe",
+      "*\\xcopy.exe",
+      "*\\cscript.exe",
+      "*\\wscript.exe"
+    ],
+    "WriteFileWhiteList": [
+      "*\\cmdagent.exe",
+      "*\\MsMpEng.exe",
+      "*\\RmmService.exe",
+      "*\\ITSMService.exe",
+      "*\\officec2rclient.exe",
+      "*\\PmService.exe",
+      "*\\remsh.exe",
+      "*\\cfpconfg.exe",
+      "*\\ngen.exe",
+      "*\\cwagtsrv.exe",
+      "*\\edrstart.exe",
+      "*\\Code.exe",
+      "*\\git.exe",
+      "*\\DropboxUpdate.exe",
+      "*\\GoogleUpdate.exe",
+      "*\\devenv.exe"
+    ],
+    "suspiciousTools": [
+      "*\\accesschk.exe",
+      "*\\accesschk64.exe",
+      "*\\ADExplorer.exe",
+      "*\\ADExplorer64.exe",
+      "*\\Autologon.exe",
+      "*\\Autologon64.exe",
+      "*\\Autoruns.exe",
+      "*\\Autoruns64.exe",
+      "*\\autorunsc.exe",
+      "*\\autorunsc64.exe",
+      "*\\handle.exe",
+      "*\\handle64.exe",
+      "*\\Listdlls.exe",
+      "*\\Listdlls64.exe",
+      "*\\procdump.exe",
+      "*\\procdump64.exe",
+      "*\\PsExec.exe",
+      "*\\PsExec64.exe",
+      "*\\PsInfo.exe",
+      "*\\PsInfo64.exe",
+      "*\\PsLoggedon.exe",
+      "*\\PsLoggedon64.exe",
+      "*\\pslist.exe",
+      "*\\pslist64.exe",
+      "*\\ShareEnum.exe",
+      "*\\ShareEnum64.exe",
+      "*\\sdelete.exe",
+      "*\\sdelete64.exe",
+      "*\\ADRestore.exe",
+      "*\\ADRestore64.exe",
+      "*\\logonsessions.exe",
+      "*\\logonsessions64.exe",
+      "*\\portmon.exe",
+      "*\\pskill.exe",
+      "*\\pskill64.exe",
+      "*\\PsService.exe",
+      "*\\PsService64.exe",
+      "*\\pssuspend.exe",
+      "*\\pssuspend64.exe",
+      "*\\ShellRunas.exe",
+      "*\\tcpview.exe",
+      "*\\tcpview64.exe",
+      "*\\Winobj.exe",
+      "*\\Winobj64.exe"
+    ]
+  },
+  "PolicyHash": "1e7c8f49e7e8ad2b644dba56aadf8a75d9a47f2b",
+  "PolicyId": "083a5a60-default-windows-policy",
+  "dynamic_json": {
+    "allowlist": [
+      "onesvc.exe"
+    ],
+    "firstName": [
+      "ntmodifybootentry",
+      "ntcreatethreadex"
+    ],
+    "malicious_command": [
+
+  "net stop",
+
+  "net start",
+
+  "net pause",
+
+  "net continue",
+
+  "net user",
+
+  "net localgroup",
+
+  "netsh advfirewall",
+
+  "netsh firewall",
+
+  "net stop veeam",
+
+  "net stop sophos",
+
+  "net stop acronis",
+
+  "net stop backup",
+
+  "net stop sql",
+
+  "sc config",
+
+  "sc stop",
+
+  "sc delete",
+
+  "sc start",
+
+  "vssadmin delete shadows",
+
+  "vssadmin resize shadowstorage",
+
+  "vssadmin list shadows",
+
+  "bcdedit /set",
+
+  "bcdedit /deletevalue",
+
+  "wbadmin delete",
+
+  "wbadmin stop",
+
+  "wbadmin start",
+
+  "diskpart",
+
+  "mountvol",
+
+  "fsutil file setzerodata",
+
+  "fsutil volume dismount",
+
+  "powershell -enc",
+
+  "powershell -nop -w hidden",
+
+  "powershell -c",
+
+  "schtasks /create",
+
+  "schtasks /run",
+
+  "schtasks /delete",
+
+  "taskkill /im",
+
+  "taskkill /f",
+
+  "del /s /f /q",
+
+  "cipher /w",
+
+  "attrib +h +s",
+
+  "icacls",
+
+  "wevtutil cl",
+
+  "tzutil /s",
+
+  "wscript",
+
+  "cscript",
+
+  "mshta",
+
+  "reg add",
+
+  "reg delete",
+
+  "reg import",
+
+  "reg export",
+
+  "certutil -urlcache -split -f",
+
+  "certutil -decode",
+
+  "curl",
+
+  "wget",
+
+  "tftp -i",
+
+  "schtasks /change",
+
+  "shutdown /r /f",
+
+  "shutdown /s /f",
+
+  "wmic process call",
+
+  "wmic shadowcopy delete",
+
+  "wmic service",
+
+  "bitsadmin /transfer",
+
+  "expand",
+
+  "makecab",
+
+  "robocopy",
+
+  "xcopy",
+
+  "copy",
+ 
+  "nslookup",
+
+  "tracert",
+
+  "arp -a",
+
+  "ipconfig /all",
+
+  "netstat -ano",
+
+  "net view",
+
+  "net use",
+
+  "whoami",
+
+  "systeminfo",
+
+  "nltest /dclist",
+ 
+  "bitsadmin /create",
+
+  "bitsadmin /addfile",
+
+  "bitsadmin /complete",
+
+  "powershell invoke-webrequest",
+
+  "powershell start-bitstransfer",
+
+  "certreq -submit",
+
+  "msiexec /q /i",
+
+  "regsvr32 /s /u /i",
+
+  "rundll32",
+
+  "wmic os get",
+
+  "wmic product get",
+
+  "wmic qfe",
+
+  "msiexec /i http",
+
+  "rundll32 javascript:",
+ 
+  "net stop windefend",
+
+  "net stop securityhealthservice",
+
+  "net stop wsearch",
+
+  "sc stop vss",
+
+  "sc stop backup*",
+
+  "sc config * start= disabled",
+
+  "bcdedit /set safeboot minimal",
+
+  "bcdedit /set {default} recoveryenabled no",
+ 
+  "schtasks /query",
+
+  "schtasks /change /disable",
+
+  "at /?",
+
+  "wmic startup",
+
+  "wmic service create",
+
+  "reg add HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Run",
+
+  "reg add HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run",
+
+  "mklink",
+ 
+  "cipher /x",
+
+  "fsutil usn deletejournal",
+
+  "wevtutil sl",
+
+  "rd /s /q",
+
+  "takeown /f",
+
+  "icacls /grant everyone:F",
+ 
+  "hh.exe",
+
+  "msiexec /i",
+
+  "forfiles /p",
+
+  "certutil -hashfile",
+
+  "desktopimgdownldr.exe",
+
+  "pwsh -nop -nol -enc",
+  
+
+]
+
+ ,
+    "mbroverwrite": [
+      "\\\\.\\physicaldrive0",
+      "\\\\.\\mountpointmanager"
+    ],
+    "office_app": [
+      "wonword.exe",
+      "powerpnt.exe",
+      "excel.exe",
+      "mspub.exe",
+      "onenote.exe",
+      "cmd.exe",
+      "powershell.exe"
+    ],
+    "sandbox_files": [
+      "sbiedll.dll",
+      "dbghelp.dll",
+      "api_log.dll",
+      "dir_watch.dll",
+      "pstorec.dll",
+      "vmcheck.dll",
+      "wpespy.dll"
+    ],
+    "scriptinterpreter": []
+  },
+  "latestVersion": "1.1.261.2"
+}
